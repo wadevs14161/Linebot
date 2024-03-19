@@ -100,7 +100,7 @@ def find_product():
             line_bot_api = MessagingApi(api_client)
             if result == -1:
                 reply = "商品不存在日本Uniqlo哦!"
-                line_bot_api.reply_message(ReplyMessageRequest(
+                line_bot_api.reply_message_with_http_info(ReplyMessageRequest(
                     replyToken=event.reply_token, 
                     messages=[TextMessage(text=reply)])
                 )
@@ -110,7 +110,7 @@ def find_product():
                 reply3 = "折合台幣: %s元" % result[3]
                 reply4 = "臺灣官網售價: %s元" % result[4]
                 
-                line_bot_api.reply_message(ReplyMessageRequest(
+                line_bot_api.reply_message_with_http_info(ReplyMessageRequest(
                     replyToken=event.reply_token, 
                     messages=[TextMessage(text=reply1),
                               TextMessage(text=reply2),
