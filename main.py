@@ -105,8 +105,8 @@ def find_product():
                         messages=[TextMessage(text=reply)])
                 )
             else:
-                reply1 = result[1]
-                reply2 = result[2]
+                reply1 = "商品連結\n %s" % result[1]
+                reply2 = "商品價格: %d日圓" % result[2]
                 line_bot_api.reply_message(ReplyMessageRequest(
                         replyToken=event.reply_token, 
                         messages=[TextMessage(text=reply1), TextMessage(text=reply2)])
