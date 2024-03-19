@@ -93,33 +93,30 @@ def find_product():
     #     abort(400)
 
     for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessageContent):
-            continue
-        message_input = event.message.text
-        result = product_crawl(message_input)
-        with ApiClient(configuration) as api_client:
-            line_bot_api = MessagingApi(api_client)
-            if result == -1:
-                reply = "商品不存在日本Uniqlo哦!"
-                line_bot_api.reply_message_with_http_info(ReplyMessageRequest(
-                    replyToken=event.reply_token, 
-                    messages=[TextMessage(text=reply)])
-                )
-            else:
-                reply1 = "商品連結\n %s" % result[1]
-                reply2 = "商品價格: %d日圓" % result[2]
-                reply3 = "折合台幣: %s元" % result[3]
-                reply4 = "臺灣官網售價: %s元" % result[4]
-                
-                line_bot_api.reply_message_with_http_info(ReplyMessageRequest(
-                    replyToken=event.reply_token, 
-                    messages=[TextMessage(text=reply1),
-                              TextMessage(text=reply2),
-                              TextMessage(text=reply3),
-                              TextMessage(text=reply4)])
-                )
+        if isinstance(event, MessageEvent):
+            message_input = event.message.text
+            result = product_crawl(message_input)
+            with ApiClient(configuration) as api_client:
+                line_bot_api = MessagingApi(api_client)
+                if result == -1:
+                    reply = "商品不存在日本Uniqlo哦!"
+                    line_bot_api.reply_message_with_http_info(ReplyMessageRequest(
+                        replyToken=event.reply_token, 
+                        messages=[TextMessage(text=reply)])
+                    )
+                else:
+                    reply1 = "商品連結\n %s" % result[1]
+                    reply2 = "商品價格: %d日圓" % result[2]
+                    reply3 = "折合台幣: %s元" % result[3]
+                    reply4 = "臺灣官網售價: %s元" % result[4]
+                    
+                    line_bot_api.reply_message_with_http_info(ReplyMessageRequest(
+                        replyToken=event.reply_token, 
+                        messages=[TextMessage(text=reply1),
+                                TextMessage(text=reply2),
+                                TextMessage(text=reply3),
+                                TextMessage(text=reply4)])
+                    )
 
     return 'OK'
 
