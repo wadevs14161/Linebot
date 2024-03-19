@@ -67,16 +67,13 @@ def callback():
         #     continue
         # if not isinstance(event.message, TextMessageContent):
         #     continue
-        message_input = event.message.text
-        result = product_crawl(message_input)
-        print(result)
         # text=event.message.text
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=result[0])]
+                    messages=[TextMessage(text=event.message.text)]
                 )
             )
 
@@ -99,16 +96,16 @@ def find_product():
     for event in events:
         message_input = event.message.text
         result = product_crawl(message_input)
-        print(result)
+        print("Here so far")
         # text=event.message.text
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
-            line_bot_api.reply_message_with_http_info(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[TextMessage(text=result[0])]
-                )
-            )
+            # line_bot_api.reply_message_with_http_info(
+            #     ReplyMessageRequest(
+            #         reply_token=event.reply_token,
+            #         messages=[TextMessage(text=result[0])]
+            #     )
+            # )
 
     return 'OK'
 
