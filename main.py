@@ -69,6 +69,37 @@ def callback():
         #     continue
         message_input = event.message.text
         result = product_crawl(message_input)
+        print(result)
+        # text=event.message.text
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=result[0])]
+                )
+            )
+
+    return 'OK'
+
+@app.route("/find_product", methods=['POST'])
+def find_product():
+    signature = request.headers['X-Line-Signature']
+
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    # parse webhook body
+    try:
+        events = parser.parse(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    for event in events:
+        message_input = event.message.text
+        result = product_crawl(message_input)
+        print(result)
         # text=event.message.text
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
