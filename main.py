@@ -18,7 +18,8 @@ from linebot.v3.messaging import (
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
-    TextMessage
+    TextMessage,
+    ImageMessage
 )
 from crawl import product_crawl
 
@@ -64,11 +65,12 @@ def find_product():
             line_bot_api = MessagingApi(api_client)
             message_input = event.message.text
             if message_input == "1":
-                reply = "https://i.imgur.com/HLw9BhO.jpg"
+                img_url = "https://i.imgur.com/HLw9BhO.jpg"
+                reply = ImageMessage(original_content_url=img_url, preview_image_url=img_url)
                 line_bot_api.reply_message(
                     ReplyMessageRequest(
                     replyToken=event.reply_token,
-                    messages=[TextMessage(text=reply)]))
+                    messages=[reply])
                 break
 
             result = product_crawl(message_input)
