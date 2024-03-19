@@ -100,6 +100,12 @@ def find_product():
         # text=event.message.text
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
+            line_bot_api.reply_message(
+                ReplyMessageRequest(
+                    replyToken=event.reply_token,
+                    messages=[TextMessage(text=result[0])]
+                )
+            )
             # line_bot_api.reply_message_with_http_info(
             #     ReplyMessageRequest(
             #         reply_token=event.reply_token,
