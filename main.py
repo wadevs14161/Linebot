@@ -88,10 +88,10 @@ def find_product():
     app.logger.info("Request body: " + body)
 
     # parse webhook body
-    try:
-        events = parser.parse(body, signature)
-    except InvalidSignatureError:
-        abort(400)
+    # try:
+    events = parser.parse(body, signature)
+    # except InvalidSignatureError:
+    #     abort(400)
 
     for event in events:
         message_input = event.message.text
