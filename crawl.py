@@ -7,7 +7,8 @@ def product_crawl(serial_number):
     # first check if product exist in UniqloJP
     product_page = requests.get(product_url)
     if product_page.status_code == 404:
-        return ["商品不存在日本Uniqlo哦!"]
+        return -1
+        # return ["商品不存在日本Uniqlo哦!"]
     else:
         # search product in google
         search_base = "https://www.google.com/search?q=uniqlo+jp+"

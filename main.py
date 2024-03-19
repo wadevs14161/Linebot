@@ -96,23 +96,21 @@ def find_product():
     for event in events:
         message_input = event.message.text
         result = product_crawl(message_input)
-        print("Here so far")
-        # text=event.message.text
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
-            line_bot_api.reply_message(
-                ReplyMessageRequest(
-                    replyToken=event.reply_token,
-                    messages=[TextMessage(text=result[1])]
+            if result == -1:
+                reply = "商品不存在日本Uniqlo哦!"
+                line_bot_api.reply_message(ReplyMessageRequest(
+                        replyToken=event.reply_token, 
+                        messages=[TextMessage(text=reply)])
                 )
-            )
-            print("Sould print url")
-            # line_bot_api.reply_message_with_http_info(
-            #     ReplyMessageRequest(
-            #         reply_token=event.reply_token,
-            #         messages=[TextMessage(text=result[0])]
-            #     )
-            # )
+            else:
+                reply1 = result[1]
+                reply2 = result[2]
+                line_bot_api.reply_message(ReplyMessageRequest(
+                        replyToken=event.reply_token, 
+                        messages=[TextMessage(text=reply1), TextMessage(text=reply2)])
+                )
 
     return 'OK'
 
