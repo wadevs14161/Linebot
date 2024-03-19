@@ -54,8 +54,10 @@ def callback():
 
     # parse webhook body
     
-    events = parser.parse(body, signature)
-
+    try:
+        events = parser.parse(body, signature)
+    except InvalidSignatureError:
+        abort(400)
 
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
