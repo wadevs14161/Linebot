@@ -1,9 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, abort
 import os
 import sys
 from argparse import ArgumentParser
 
-from flask import Flask, request, abort
 from linebot import (
     WebhookParser
 )
@@ -53,26 +52,26 @@ def callback():
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    # parse webhook body
+    parse webhook body
     try:
         events = parser.parse(body, signature)
     except InvalidSignatureError:
         abort(400)
 
     # if event is MessageEvent and message is TextMessage, then echo text
-    for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessageContent):
-            continue
-        with ApiClient(configuration) as api_client:
-            line_bot_api = MessagingApi(api_client)
-            line_bot_api.reply_message_with_http_info(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[TextMessage(text=event.message.text)]
-                )
-            )
+    # for event in events:
+    #     if not isinstance(event, MessageEvent):
+    #         continue
+    #     if not isinstance(event.message, TextMessageContent):
+    #         continue
+    #     with ApiClient(configuration) as api_client:
+    #         line_bot_api = MessagingApi(api_client)
+    #         line_bot_api.reply_message_with_http_info(
+    #             ReplyMessageRequest(
+    #                 reply_token=event.reply_token,
+    #                 messages=[TextMessage(text=event.message.text)]
+    #             )
+    #         )
 
     return 'OK'
 
