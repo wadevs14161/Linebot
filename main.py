@@ -103,7 +103,6 @@ def find_product():
                     replyToken=event.reply_token, 
                     messages=[TextMessage(text=reply)])
                 )
-                break
             else:
                 reply1 = "商品連結\n %s" % result[1]
                 reply2 = "商品價格: %d日圓" % result[2]
@@ -117,7 +116,6 @@ def find_product():
                               TextMessage(text=reply3),
                               TextMessage(text=reply4)])
                 )
-                break
 
     return 'OK'
 
