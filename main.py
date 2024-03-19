@@ -70,7 +70,7 @@ def find_product():
                 line_bot_api.reply_message(
                     ReplyMessageRequest(
                     replyToken=event.reply_token,
-                    messages=[reply])
+                    messages=[reply]))
                 break
 
             result = product_crawl(message_input)
