@@ -20,6 +20,7 @@ from linebot.v3.messaging import (
     ReplyMessageRequest,
     TextMessage
 )
+from crawl import product_crawl
 
 app = Flask(__name__)
 
@@ -53,24 +54,27 @@ def callback():
     app.logger.info("Request body: " + body)
 
     # parse webhook body
-    
     try:
         events = parser.parse(body, signature)
     except InvalidSignatureError:
         abort(400)
 
-    # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
+        '''
+        Looks like the 4 line code below makes railway app crash
+        '''
         # if not isinstance(event, MessageEvent):
         #     continue
         # if not isinstance(event.message, TextMessageContent):
         #     continue
+        reply = "Test this bot!"
+        # text=event.message.text
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=event.message.text)]
+                    messages=[TextMessage(text=reply)]
                 )
             )
 
@@ -86,8 +90,3 @@ if __name__ == "__main__":
     options = arg_parser.parse_args()
 
     app.run(debug=options.debug, port=options.port)
-
-
-
-# if __name__ == '__main__':
-#     app.run(debug=True, port=os.getenv("PORT", default=5000))
