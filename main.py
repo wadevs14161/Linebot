@@ -89,28 +89,28 @@ def find_product():
 
     # parse webhook body
     # try:
-    events = parser.parse(body, signature)
+    event = parser.parse(body, signature)
     # except InvalidSignatureError:
     #     abort(400)
 
-    for event in events:
-        message_input = event.message.text
-        result = product_crawl(message_input)
-        with ApiClient(configuration) as api_client:
-            line_bot_api = MessagingApi(api_client)
-            if result == -1:
-                reply = "商品不存在日本Uniqlo哦!"
-                line_bot_api.reply_message(ReplyMessageRequest(
-                        replyToken=event.reply_token, 
-                        messages=[TextMessage(text=reply)])
-                )
-            else:
-                reply1 = "商品連結\n %s" % result[1]
-                reply2 = "商品價格: %d日圓" % result[2]
-                line_bot_api.reply_message(ReplyMessageRequest(
-                        replyToken=event.reply_token, 
-                        messages=[TextMessage(text=reply1), TextMessage(text=reply2)])
-                )
+    # for event in events:
+    message_input = event.message.text
+    result = product_crawl(message_input)
+    with ApiClient(configuration) as api_client:
+        line_bot_api = MessagingApi(api_client)
+        if result == -1:
+            reply = "商品不存在日本Uniqlo哦!"
+            line_bot_api.reply_message(ReplyMessageRequest(
+                    replyToken=event.reply_token, 
+                    messages=[TextMessage(text=reply)])
+            )
+        else:
+            reply1 = "商品連結\n %s" % result[1]
+            reply2 = "商品價格: %d日圓" % result[2]
+            line_bot_api.reply_message(ReplyMessageRequest(
+                    replyToken=event.reply_token, 
+                    messages=[TextMessage(text=reply1), TextMessage(text=reply2)])
+            )
 
     return 'OK'
 
