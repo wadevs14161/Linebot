@@ -43,7 +43,19 @@ configuration = Configuration(
 
 @app.route('/')
 def index():
-    return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
+    signature = request.headers['X-Line-Signature']
+
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    # parse webhook body
+    try:
+        events = parser.parse(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+    
+        return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
 
 
 @app.route("/find_product", methods=['POST'])
@@ -96,7 +108,7 @@ def find_product():
                               TextMessage(text=reply3),
                               TextMessage(text=reply4)]))
                 
-    # return 'OK'
+    return 'OK'
 
 
 if __name__ == "__main__":
