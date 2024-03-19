@@ -93,10 +93,6 @@ def find_product():
     #     abort(400)
 
     for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessageContent):
-            continue
         message_input = event.message.text
         result = product_crawl(message_input)
         with ApiClient(configuration) as api_client:
