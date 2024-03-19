@@ -45,39 +45,6 @@ def index():
     return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
 
 
-@app.route("/callback", methods=['POST'])
-def callback():
-    signature = request.headers['X-Line-Signature']
-
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-
-    # parse webhook body
-    try:
-        events = parser.parse(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-
-    for event in events:
-        '''
-        Looks like the 4 line code below makes railway app crash
-        '''
-        # if not isinstance(event, MessageEvent):
-        #     continue
-        # if not isinstance(event.message, TextMessageContent):
-        #     continue
-        with ApiClient(configuration) as api_client:
-            line_bot_api = MessagingApi(api_client)
-            line_bot_api.reply_message_with_http_info(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[TextMessage(text=event.message.text)]
-                )
-            )
-
-    return 'OK'
-
 @app.route("/find_product", methods=['POST'])
 def find_product():
     signature = request.headers['X-Line-Signature']
@@ -93,32 +60,41 @@ def find_product():
     #     abort(400)
 
     for event in events:
-        message_input = event.message.text
-        result = product_crawl(message_input)
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
-            if result == -1:
-                reply = "商品不存在日本Uniqlo哦!"
-                line_bot_api.reply_message_with_http_info(ReplyMessageRequest(
-                    replyToken=event.reply_token, 
-                    messages=[TextMessage(text=reply)])
-                )
+            message_input = event.message.text
+            if message_input == "1":
+                reply = "https://i.imgur.com/HLw9BhO.jpg"
+                line_bot_api.reply_message(
+                    ReplyMessageRequest(
+                    replyToken=event.reply_token,
+                    messages=[TextMessage(text=reply)]))
                 break
+
+            result = product_crawl(message_input)
+            if result == -1:
+                reply1 = "商品不存在日本Uniqlo哦!"
+                reply2 = "請重新輸入或按 1 看範例~"
+                line_bot_api.reply_message_with_http_info(
+                    ReplyMessageRequest(
+                    replyToken=event.reply_token, 
+                    messages=[TextMessage(text=reply1),
+                              TextMessage(text=reply2)]))
             else:
                 reply1 = "商品連結\n %s" % result[1]
                 reply2 = "商品價格: %d日圓" % result[2]
                 reply3 = "折合台幣: %s元" % result[3]
                 reply4 = "臺灣官網售價: %s元" % result[4]
                 
-                line_bot_api.reply_message_with_http_info(ReplyMessageRequest(
+                line_bot_api.reply_message_with_http_info(
+                    ReplyMessageRequest(
                     replyToken=event.reply_token, 
                     messages=[TextMessage(text=reply1),
                               TextMessage(text=reply2),
                               TextMessage(text=reply3),
-                              TextMessage(text=reply4)])
-                )
-                break
-    return 'OK'
+                              TextMessage(text=reply4)]))
+                
+    # return 'OK'
 
 
 if __name__ == "__main__":
