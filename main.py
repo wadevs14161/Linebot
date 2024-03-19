@@ -67,14 +67,15 @@ def callback():
         #     continue
         # if not isinstance(event.message, TextMessageContent):
         #     continue
-        reply = "Test this bot!"
+        message_input = event.message.text
+        result = product_crawl(message_input)
         # text=event.message.text
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=reply)]
+                    messages=[TextMessage(text=result[0])]
                 )
             )
 

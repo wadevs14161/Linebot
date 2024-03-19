@@ -60,10 +60,8 @@ def product_crawl(serial_number):
             price_text_tw = price_text_tw.replace('NT', '')
         if "$" in price_text_tw:
             price_text_tw = price_text_tw.replace('$', '')
-        price_tw = int(price_text_tw)
         
-        result = [serial_number, product_url, price_jp, jp_price_in_twd, price_tw]
-        # database.product_insert(result)
+        result = [serial_number, product_url, price_jp, jp_price_in_twd, price_text_tw]
 
         return result
 
