@@ -8,13 +8,11 @@ def product_crawl(serial_number):
     product_page = requests.get(product_url)
     if product_page.status_code == 404:
         return -1
-        # return ["商品不存在日本Uniqlo哦!"]
     else:
         # search product in google
         search_base = "https://www.google.com/search?q=uniqlo+jp+"
         search_url = search_base + serial_number
         search_page = requests.get(search_url)
-    
         soup = BeautifulSoup(search_page.text, "lxml")
         span_set = soup.find_all('span')[15:25]
         price_text = ""
@@ -39,6 +37,7 @@ def product_crawl(serial_number):
         soup = BeautifulSoup(currency_page.text, "lxml")
         exchange_rate = float(soup.find('div', class_='YMlKec fxKbKc').get_text())
         jp_price_in_twd = round(price_jp * exchange_rate)
+
         # find price in UQ 搜尋
         product_url_tw = "https://www.google.com/search?q=uniqlo+%E6%90%9C%E5%B0%8B+"
         product_url_tw += serial_number
@@ -69,5 +68,4 @@ def product_crawl(serial_number):
             
 # test, product list = [464787, 467536, 467543, 459591, 460926, 463503]
 if __name__ == '__main__':
-    serial_number = "467543"
-    product_crawl(serial_number)
+    pass
