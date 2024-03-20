@@ -71,5 +71,5 @@ def product_crawl(serial_number):
             
 # test, product list = [464787, 467536, 467543, 459591, 460926, 463503]
 if __name__ == '__main__':
-    print(product_crawl("466578"))
+    pass
     
