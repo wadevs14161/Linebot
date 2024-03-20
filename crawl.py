@@ -48,12 +48,13 @@ def product_crawl(serial_number):
         for span in span_set_tw:
             text = span.get_text()
             text_length = len(text)
-            if "NT" and ".00" and "$" in text and text_length < 13:
+            # if ".00" and "$" in text and text_length < 13:
+            if ".00" and "$" in text and "HK" not in text:
                 price_text_tw = text
                 break
         # trim
         if ".00" in price_text_tw:
-            price_text_tw = price_text_tw[:-3]
+            price_text_tw = price_text_tw.replace('.00', '')
         if "," in price_text_tw:
             price_text_tw = price_text_tw.replace(',', '')
         if "NT" in price_text_tw:
@@ -68,5 +69,5 @@ def product_crawl(serial_number):
             
 # test, product list = [464787, 467536, 467543, 459591, 460926, 463503]
 if __name__ == '__main__':
-    print(product_crawl("465193"))
+    print(product_crawl("461185"))
     

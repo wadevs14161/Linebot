@@ -1,9 +1,19 @@
 if __name__ == "__main__":
-    text = "$HK199.00"
-    text_length = len(text)
-    if ".00" and "$" in text and "HK" not in text and text_length < 13:
-    # if ".00" and "$" in text and text_length < 13:
-        # if "HK" not in text:
-        print("Good")
-    else:
-        print("BAD")
+    price_text_tw = "$HK199.00"
+    if "HK" not in price_text_tw:
+        print("NO HK")
+
+
+
+
+    price_text_tw = "$390.00 至 $990.00"
+    if ".00" in price_text_tw:
+        # price_text_tw = price_text_tw[:-3]
+        price_text_tw = price_text_tw.replace('.00', '')
+    if "," in price_text_tw:
+        price_text_tw = price_text_tw.replace(',', '')
+    if "NT" in price_text_tw:
+        price_text_tw = price_text_tw.replace('NT', '')
+    if "$" in price_text_tw:
+        price_text_tw = price_text_tw.replace('$', '')
+    print(price_text_tw)
