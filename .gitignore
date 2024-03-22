@@ -3,13 +3,18 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
 ### Python ###
+
+# test crawler
+webcrawl.py
+requests_html.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
 # C extensions
-*.so
+*.sof
 
 # Distribution / packaging
 .Python
