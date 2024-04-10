@@ -12,13 +12,10 @@ def product_crawl(serial_number):
     elif product_page:
         product_info_api_url = "https://www.uniqlo.com/jp/api/commerce/v5/ja/products/E{}-000/price-groups/00/l2s?withPrices=true&withStocks=true&includePreviousPrice=false&httpFailure=true".format(serial_number)
         product_info_page = requests.get(product_info_api_url)
-        # product_detail_info = BeautifulSoup(product_info_page.text, "lxml")
 
         json_input = product_info_page.json()
 
         price_list = []
-        #size_instock = []
-        #size_available = []
         product_stock = {
             'XS': 0,
             'S': 0,
@@ -69,7 +66,6 @@ def product_crawl(serial_number):
             else:
                 color = 'Others 其他'
             product_dict['color'] = color
-            #product_list.append(product_dict)
             
             # Add size
             size_code = int(item['size']['code'][-3:])
@@ -145,7 +141,7 @@ def product_crawl(serial_number):
         if "$" in price_text_tw:
             price_text_tw = price_text_tw.replace('$', '')
         
-        result = [serial_number, product_url, price_jp, jp_price_in_twd, price_text_tw]
+        result = [serial_number, product_url, price_jp, jp_price_in_twd, price_text_tw, product_list]
 
         return result
 
