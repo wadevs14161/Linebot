@@ -115,33 +115,24 @@ def product_crawl(serial_number):
         price_jp = int(product_list[0]['price'])
         jp_price_in_twd = round(price_jp * exchange_rate)
 
-        # find price in UQ 搜尋
-        product_url_tw = "https://www.google.com/search?q=uniqlo+%E6%90%9C%E5%B0%8B+"
-        product_url_tw += serial_number
-        product_page_tw = requests.get(product_url_tw)
-        soup_tw = BeautifulSoup(product_page_tw.text, "lxml")
-        span_set_tw = soup_tw.find_all('span')[10:]
-        price_text_tw = ""
-        for span in span_set_tw:
-            text = span.get_text()
-            text_length = len(text)
-            # if ".00" and "$" in text and text_length < 13:
-            if ".00" and "$" in text:
-                if "HK" not in text:
-                    price_text_tw = text
-                    break
-                continue
-        # trim
-        if ".00" in price_text_tw:
-            price_text_tw = price_text_tw.replace('.00', '')
-        if "," in price_text_tw:
-            price_text_tw = price_text_tw.replace(',', '')
-        if "NT" in price_text_tw:
-            price_text_tw = price_text_tw.replace('NT', '')
-        if "$" in price_text_tw:
-            price_text_tw = price_text_tw.replace('$', '')
+        uq_url = "https://uq.goodjack.tw/search?query=" + serial_number
+        url = requests.get(uq_url).url
+        product_code_tw = url[-14:]
+        product_info_tw_url = "https://d.uniqlo.com/tw/p/product/i/product/spu/pc/query/" + product_code_tw + "/zh_TW"
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+        product_info_tw = requests.get(product_info_tw_url, headers=headers)
+
+        json_input_tw = product_info_tw.json()
+        price_tw = []
+        if json_input_tw['success']:
+            price_original = json_input_tw['resp'][0]['summary']['originPrice']
+            price_min = json_input_tw['resp'][0]['summary']['minPrice']
+            price_max = json_input_tw['resp'][0]['summary']['maxPrice']
+            price_tw.append(int(price_original))
+            price_tw.append(int(price_min))
+            price_tw.append(int(price_max))
         
-        result = [serial_number, product_url, price_jp, jp_price_in_twd, price_text_tw, product_list]
+        result = [serial_number, product_url, price_jp, jp_price_in_twd, price_tw, product_list]
 
         return result
 

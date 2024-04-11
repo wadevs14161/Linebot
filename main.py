@@ -79,11 +79,7 @@ def find_product():
                     messages=[TextMessage(text=reply1),
                               TextMessage(text=reply2)]))
             else:
-                reply1 = "商品連結\n %s" % result[1]
-                reply2 = "商品價格: %d日圓" % result[2]
-                reply3 = "折合台幣: %s元" % result[3]
-                reply4 = "臺灣官網售價: %s元" % result[4]
-
+                reply1 = "商品連結:\n %s\n商品價格: %s日圓\n折合台幣: %s元\n臺灣官網售價: %s元" % (result[1], result[2], result[3], result[4][2])
                 available_dict = {}
                 for item in result[5]:
                     if item['stock'] != 'STOCK_OUT' and item['color'] not in available_dict:
@@ -91,21 +87,16 @@ def find_product():
                     if item['stock'] != 'STOCK_OUT' and item['color'] in available_dict:
                         available_dict[item['color']].append(item['size'])
 
-                reply5 = "商品庫存"
-
+                reply2 = "日本官網庫存:"
                 for color in available_dict:
-                    reply5 += "\n{}: ".format(color)
-                    reply5 += "{}".format(', '.join(available_dict[color]))
+                    reply2 += "\n{}: ".format(color)
+                    reply2 += "{}".format(', '.join(available_dict[color]))
 
-                
                 line_bot_api.reply_message_with_http_info(
                     ReplyMessageRequest(
                     replyToken=event.reply_token, 
                     messages=[TextMessage(text=reply1),
-                              TextMessage(text=reply2),
-                              TextMessage(text=reply3),
-                              TextMessage(text=reply4),
-                              TextMessage(text=reply5)]))
+                              TextMessage(text=reply2)]))
                 
     return 'OK'
 
