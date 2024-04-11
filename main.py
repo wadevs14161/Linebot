@@ -86,6 +86,13 @@ def find_product():
                         reply1 += "\n臺灣官網售價: {}元".format(result[4][2])
                     except:
                         reply1 += "\n臺灣官網售價: {}元".format(result[4][1])
+                    
+                available_dict = {}
+                for item in result[5]:
+                    if item['stock'] != 'STOCK_OUT' and item['color'] not in available_dict:
+                        available_dict[item['color']] = []
+                    if item['stock'] != 'STOCK_OUT' and item['color'] in available_dict:
+                        available_dict[item['color']].append(item['size'])
 
                 reply2 = "日本官網庫存:"
                 for color in available_dict:
