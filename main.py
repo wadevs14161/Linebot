@@ -79,13 +79,13 @@ def find_product():
                     messages=[TextMessage(text=reply1),
                               TextMessage(text=reply2)]))
             else:
-                reply1 = "商品連結:\n %s\n商品價格: %s日圓\n折合台幣: %s元\n臺灣官網售價: %s元" % (result[1], result[2], result[3], result[4][2])
-                available_dict = {}
-                for item in result[5]:
-                    if item['stock'] != 'STOCK_OUT' and item['color'] not in available_dict:
-                        available_dict[item['color']] = []
-                    if item['stock'] != 'STOCK_OUT' and item['color'] in available_dict:
-                        available_dict[item['color']].append(item['size'])
+                reply1 = "商品連結:\n %s\n商品價格: %s日圓\n折合台幣: %s元" % (result[1], result[2], result[3])
+                # reply1 = "商品連結:\n %s\n商品價格: %s日圓\n折合台幣: %s元\n臺灣官網售價: %s元" % (result[1], result[2], result[3], result[4][2])
+                if len(result[4]) != 0:
+                    try:
+                        reply1 += "\n臺灣官網售價: {}元".format(result[4][2])
+                    except:
+                        reply1 += "\n臺灣官網售價: {}元".format(result[4][1])
 
                 reply2 = "日本官網庫存:"
                 for color in available_dict:
